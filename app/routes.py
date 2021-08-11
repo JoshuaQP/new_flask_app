@@ -41,23 +41,24 @@ def create_user():
         )
     )
     db.session.commit()
-
-
-
-  
     return out, 201
+    
 
 
 
-@app.route("/user/<int:uid>", methods=["DELETE"])
-def delet_user(uid):
-    out ={
+@app.route("/users/<int:uid>", methods=["DELETE"])
+def delete_user(uid):
+    out = {
         "ok": True,
         "message":"Success"
     }
+    user = User.query.filter_by(id=uid).first()
+    user.active = 0
+    db.session.commit()
+    return out, 200
 
     
-    return out, 200
+    
 
 
 @app.route("/users/<int:uid>", methods=["GET"])
@@ -66,7 +67,7 @@ def get_single_user(uid):
         "ok": True,
         "message": "Success"
     }
-    user = User.query.filter_by(first_name="mike").first()
+    out["user"] = User.query.filter_by(id=uid).first()
     
     return out
 
